@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DepartmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class Department
      * @ORM\Column(type="string", length=255)
      */
     private $nom;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Persona::class, mappedBy="department")
+     */
+    private $persones;
+
+    public function __construct()
+    {
+        $this->persones = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +81,36 @@ class Department
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Persona[]
+     */
+    public function getPersones(): Collection
+    {
+        return $this->persones;
+    }
+
+    public function addPersone(Persona $persone): self
+    {
+        if (!$this->persones->contains($persone)) {
+            $this->persones[] = $persone;
+            $persone->setDepartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersone(Persona $persone): self
+    {
+        if ($this->persones->removeElement($persone)) {
+            // set the owning side to null (unless already changed)
+            if ($persone->getDepartment() === $this) {
+                $persone->setDepartment(null);
+            }
+        }
 
         return $this;
     }
