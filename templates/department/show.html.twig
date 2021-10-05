@@ -4,11 +4,18 @@
 
 {% block body %}
     {% if persones|length > 0 %}
+        <div> Hi ha  {{ persones|length }} persones.</div>
         {%  for persona in persones %}
             <h4>{{ persona.nom }} {{ persona.cognoms }} {{  persona.identificador }} {{ persona.email }}  </h4>
             <small> {{  persona.email }}
             </small>
         {% endfor %}
+        {% if previous >= 0 %}
+            <a href="{{  path('department', {  id: department.id, offset: previous}) }}">Anterior</a>
+        {% endif %}
+        {% if next < persones|length %}
+            <a href="{{  path('department', {  id: department.id, offset: next}) }}">Següent</a>
+        {% endif %}
     {% else %}
         <div>No consten persones assignades a aquest departament.</div>
     {% endif %}

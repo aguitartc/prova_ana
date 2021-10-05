@@ -27,7 +27,7 @@ class PersonaRepository extends ServiceEntityRepository
     Paginator
     {
         $query = $this->createQueryBuilder('c')
-            ->andWhere('c.department = ;department')
+            ->andWhere('c.department = :department')
             ->setParameter('department', $department)
             ->orderBy('c.nom', 'ASC')
             ->setMaxResults($offset)
