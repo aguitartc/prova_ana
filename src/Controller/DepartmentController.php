@@ -29,22 +29,34 @@ class DepartmentController extends AbstractController
     {
         return new Response($this->twig->render('department/index.html.twig',['departments'=>$departmentRepository->findAll()]));
     }
-
+# s'ha reescrit la func show amb l'slug
+#    /**
+#     * @Route("/department/{id}", name="department")
+#     */
+#    public function show(Request $request, Department $department, PersonaRepository $personaRepository)
+#        {
+#            $offset     = max(0,$request->query->getInt('offset',0));
+#            $paginator  =  $personaRepository->getPersonaPaginator($department,$offset);
+#
+#        return new Response($this->twig->render('department/show.html.twig',
+#                                            ['department'=>$department,
+#                                                'persones' => $paginator,
+#                                                'previous' => $offset - PersonaRepository::PAGINATOR_PER_PAGE,
+#                                                'next' => min(count($paginator), $offset +
+#                                                PersonaRepository::PAGINATOR_PER_PAGE),
+#                                            ]));
+#        }
     /**
-     * @Route("/department/{id}", name="department")
+     * @Route("/department/{slug}", name="department")
      */
-    public function show(Request $request, Department $department, PersonaRepository $personaRepository)
-        {
-            $offset     = max(0,$request->query->getInt('offset',0));
-            $paginator  =  $personaRepository->getPersonaPaginator($department,$offset);
-
+    public function show(Department $department, PersonaRepository $personaRepository, DepartmentRepository $departmentRepository)
+    {
         return new Response($this->twig->render('department/show.html.twig',
-                                            ['department'=>$department,
-                                                'persones' => $paginator,
-                                                'previous' => $offset - PersonaRepository::PAGINATOR_PER_PAGE,
-                                                'next' => min(count($paginator), $offset +
-                                                PersonaRepository::PAGINATOR_PER_PAGE),
-                                            ]));
-}
-
+        [
+            'departments' => $departmentRepository->findAll(),
+            'department' => $department,
+            'persones' => $personaRepository->findBy(['department'=>$department],
+            ['nom' => 'ASC'])
+        ]));
+    }
 }
