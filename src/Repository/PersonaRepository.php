@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Persona;
+use App\Entity\Department;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Persona|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,11 +16,26 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PersonaRepository extends ServiceEntityRepository
 {
+    public const PAGINATOR_PER_PAGE = 2;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Persona::class);
     }
 
+    public function getPersonaPaginator(Department $department, int $offset):
+    Paginator
+    {
+        $query = $this->createQueryBuilder('c')
+            ->andWhere('c.department = ;department')
+            ->setParameter('department', $department)
+            ->orderBy('c.nom', 'ASC')
+            ->setMaxResults($offset)
+            ->getQuery()
+        ;
+
+        return new Paginator($query);
+    }
     // /**
     //  * @return Persona[] Returns an array of Persona objects
     //  */

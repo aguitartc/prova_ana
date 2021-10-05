@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DepartmentController!{% endblock %}
+{% block title %}Department{% endblock %}
 
 {% block body %}
 <style>
@@ -9,8 +9,15 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello ! </h1>
+    <h3>Prova d'enumeració de departaments</h3>
+    {% for department in departments %}
+        <h4>
+            <a href="{{  path('department', { id: department.id }) }}"/> {{ department.getCodiUpc() }} - {{ department.getSigles() }} - {{ department.getNom() }}</a>
+        </h4>
 
+
+    {% endfor %}
     This friendly message is coming from:
     <ul>
         <li>Your controller at <code><a href="{{ '/var/www/vhosts/prova_ana/src/Controller/DepartmentController.php'|file_link(0) }}">src/Controller/DepartmentController.php</a></code></li>

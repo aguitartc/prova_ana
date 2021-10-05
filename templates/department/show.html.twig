@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Llistat membres department - {{ department.nom}}{%  endblock %}
+
+{% block body %}
+    {% if persones|length > 0 %}
+        {%  for persona in persones %}
+            <h4>{{ persona.nom }} {{ persona.cognoms }} {{  persona.identificador }} {{ persona.email }}  </h4>
+            <small> {{  persona.email }}
+            </small>
+        {% endfor %}
+    {% else %}
+        <div>No consten persones assignades a aquest departament.</div>
+    {% endif %}
+{% endblock %}
